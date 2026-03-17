@@ -7,5 +7,20 @@
 
     <body> 
         <h1>Todo</h1> 
+
+        <form action="/add" method="post">
+            <input type="text" name="title" placeholder="할 일 입력" required>
+            <button type="submit">추가</button>
+        </form>
+
+        <ul>
+            <li th:each="todo : ${todos}">
+                <span
+                    th:text="${todo.title}"
+                    th:classappend="${todo.completed} ? 'completed' : ''">
+                </span>
+            </li>
+        </ul>
+        
     </body> 
 </html>
