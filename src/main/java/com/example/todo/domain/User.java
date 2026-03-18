@@ -33,7 +33,7 @@ public class User {
         this.enabled = false;
     }
 
-    public void enable_user() {
+    public void enabled() {
         this.enabled = true;
     }
 }
