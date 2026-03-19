@@ -74,7 +74,7 @@ public class SignupService {
     }
 
     private void sendVerificationEmail(String to, String tokenValue) {
-        String link = baseUrl + "signup/verify?token=" + tokenValue;
+        String link = baseUrl + "/signup/verify?token=" + tokenValue;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);

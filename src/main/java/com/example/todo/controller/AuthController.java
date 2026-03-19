@@ -17,7 +17,7 @@ public class AuthController {
 
     @GetMapping("/signup")
     public String signupForm(Model model) {
-        model.addAttribute("singupForm", new SignupForm());
+        model.addAttribute("signupForm", new SignupForm());
         return "signup";
     }
 
