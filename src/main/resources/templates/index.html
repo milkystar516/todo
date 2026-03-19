@@ -3,6 +3,8 @@
     <head> 
         <meta charset="UTF-8"> 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
         <title>Todo</title> 
     </head> 
 
@@ -27,29 +29,26 @@
                 <button th:data-id="${todo.id}" onclick="deleteTodo(this)">삭제</button>
             </li>
         </ul>
+    
+        <!-- 스크립트 -->
+        <script>
+            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+            function deleteTodo(button) {
+                const todoId = button.getAttribute("data-id");
+
+                fetch("/todo/" + todoId, {
+                    method: "DELETE",
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById('todo-' + todoId).remove();
+                    }});
+            }
+        </script>
 
     </body> 
 </html>
-
-<script>
-    const csrfToken = document.cookie
-        .split("; ")
-        .find(row => row.startsWith("XSRF-TOKEN="))
-        ?.split("=")[1];
-
-    function deleteTodo(button) {
-        const todoId = button.getAttribute("data-id");
-
-        fetch("/todo/" + todoId, {
-            method: "DELETE",
-            headers: {
-                "X-XSRF-TOKEN": csrfToken
-            }
-        }).then(Response => {
-            if (response.ok) {
-                document.getElementById('todo-' + todoId).remove();
-            }
-        }
-        );
-    }
-</script>

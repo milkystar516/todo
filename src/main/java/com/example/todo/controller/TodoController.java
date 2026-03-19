@@ -51,6 +51,7 @@ public class TodoController {
     }
 
     @DeleteMapping("/todo/{todoId}")
+    @ResponseBody
     public ResponseEntity<Void> deleteTodo(
         @PathVariable Long todoId,
         @AuthenticationPrincipal UserDetails userDetails
