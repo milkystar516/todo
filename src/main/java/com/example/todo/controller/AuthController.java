@@ -50,4 +50,9 @@ public class AuthController {
 
         return "redirect:/login?verified";
     }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "login";
+    }
 }

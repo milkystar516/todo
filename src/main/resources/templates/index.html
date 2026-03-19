@@ -9,7 +9,11 @@
     <body> 
         <h1>Todo</h1> 
 
-        <form action="/add" method="post">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">로그아웃</button>
+        </form>
+
+        <form th:action="@{/add}" method="post">
             <input type="text" name="title" placeholder="할 일 입력" required>
             <button type="submit">추가</button>
         </form>
