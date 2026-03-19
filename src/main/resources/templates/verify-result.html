@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"> 
+    <head> 
+        <meta charset="UTF-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>이메일 인증</title> 
+    </head> 
+
+    <body> 
+        <h2>이메일 인증 실패</h2>
+        <p th:text="${errorMessage}"></p>
+        <a th:href="@{/signup}">회원가입으로 돌아가기</a>
+    </body> 
+</html>
