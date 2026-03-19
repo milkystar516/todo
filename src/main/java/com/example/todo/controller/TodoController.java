@@ -48,9 +48,10 @@ public class TodoController {
         return "redirect:/";
     }
 
-    @DeleteMapping("/${todo_id}")
-    public String DeleteTodo(
-        @RequestParam Long todoId
+    @DeleteMapping("/todo/{todoId}")
+    public String deleteTodo(
+        @PathVariable Long todoId,
+        @AuthenticationPrincipal UserDetails userDetails
     ) {
         Todo todo = todoRepository.findById(todoId)
         .orElseThrow(() -> new IllegalStateException("존재하지 않는 todo입니다"));
