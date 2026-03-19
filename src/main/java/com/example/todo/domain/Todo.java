@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Todo {
     
     @Id
-    @GeneratedValue(strategy = GeneratedValue.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
