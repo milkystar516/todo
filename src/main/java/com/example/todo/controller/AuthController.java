@@ -13,4 +13,41 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
     
+    private final SignupService signupService;
+
+    @GetMapping("/signup")
+    public String signupForm(Model model) {
+        model.addAttribute("singupForm", new SignupForm());
+        return "signup";
+    }
+
+    @PostMapping("/signup")
+    public String signup(
+        @Valid @ModelAttribute SignupForm signupForm,
+        BindingResult bindingResult,
+        Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "signup";
+        } try {
+            signupService.signup(signupForm);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "signup";
+        }
+
+        return "redirect:/signup?success";
+    }
+
+    @GetMapping("/signup/verify")
+    public String verify(@RequestParam String token, Model model) {
+        try {
+            signupService.verify(token);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "verify-result";
+        }
+
+        return "redirect:/login?verified";
+    }
 }
