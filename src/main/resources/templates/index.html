@@ -24,11 +24,27 @@
                     th:text="${todo.title}"
                     th:classappend="${todo.completed} ? 'completed' : ''">
                 </span>
-                <form th:action="@{/${todo.id}}" method="delete">
-                    <button type="submit">삭제</button>
-                </form>
+                <button th:data-id="${todo.id}" onclick="deleteTodo(this)">삭제</button>
             </li>
         </ul>
 
     </body> 
 </html>
+
+<script>
+    const csrfToken = document.cookie
+        .split("; ")
+        .find(row => row.startsWith("XSRF-TOKEN="))
+        ?.split("=")[1];
+
+    function deleteTodo(button) {
+        const todoId = button.getAttribute("data-id");
+
+        fetch("/todo/" + todoId, {
+            method: "DELETE",
+            headers: {
+                "X-XSRF-TOKEN": csrfToken
+            }
+        }).then(() => location.reload());
+    }
+</script>

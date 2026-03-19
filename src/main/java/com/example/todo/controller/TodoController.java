@@ -5,6 +5,8 @@ import com.example.todo.domain.User;
 import com.example.todo.repository.TodoRepository;
 import com.example.todo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -49,15 +51,21 @@ public class TodoController {
     }
 
     @DeleteMapping("/todo/{todoId}")
-    public String deleteTodo(
+    public ResponseEntity<Void> deleteTodo(
         @PathVariable Long todoId,
         @AuthenticationPrincipal UserDetails userDetails
     ) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+        .orElseThrow(() -> new IllegalStateException("로그인 정보가 올바르지 않습니다"));
+
         Todo todo = todoRepository.findById(todoId)
         .orElseThrow(() -> new IllegalStateException("존재하지 않는 todo입니다"));
 
-        todoRepository.delete(todo);
+        if (!todo.getUser().getId().equals(user.getId())) {
+            return ResponseEntity.status(403).build();
+        }
 
-        return "redirect:/";
+        todoRepository.delete(todo);
+        return ResponseEntity.noContent().build();
     }
 }
