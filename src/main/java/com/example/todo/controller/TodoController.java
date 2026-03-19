@@ -1,34 +1,50 @@
 package com.example.todo.controller;
 
-import java.util.ArrayList; 
-import java.util.List; 
-import java.util.concurrent.atomic.AtomicLong; 
-import org.springframework.stereotype.Controller; 
-import org.springframework.ui.Model; 
+import com.example.todo.domain.Todo;
+import com.example.todo.domain.User;
+import com.example.todo.repository.TodoRepository;
+import com.example.todo.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.todo.domain.Todo;
-
 @Controller
+@RequiredArgsConstructor
 public class TodoController {
-    private final List<Todo> todos = new ArrayList<>();
-    private final AtomicLong idGenerator = new AtomicLong();
+
+    private final TodoRepository todoRepository;
+    private final UserRepository userRepository;
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("todos", todos);
+    public String index(
+        @AuthenticationPrincipal UserDetails userDetails,
+        Model model
+    ) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+        .orElseThrow(() -> new IllegalStateException("로그인 정보가 올바르지 않습니다"));
+        
+        model.addAttribute("todos", todoRepository.findByUser(user));
         return "index";
     }
 
     @PostMapping("/add")
-    public String addTodo(@RequestParam String title) {
-        Todo todo = new Todo(
-            idGenerator.incrementAndGet(),
-            title,
-            false
-        );
+    public String addTodo(
+        @RequestParam String title,
+        @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+        .orElseThrow(() -> new IllegalStateException("로그인 정보가 올바르지 않습니다"));
 
-        todos.add(todo);
+        todoRepository.save(
+            Todo.builder()
+                .title(title)
+                .user(user)
+                .build()
+        );
+        
         return "redirect:/";
     }
 }
