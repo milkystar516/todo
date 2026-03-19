@@ -1,4 +1,4 @@
-package com.example.todo;
+package com.example.todo.controller;
 
 import java.util.ArrayList; 
 import java.util.List; 
@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Controller; 
 import org.springframework.ui.Model; 
 import org.springframework.web.bind.annotation.*;
+
+import com.example.todo.domain.Todo;
 
 @Controller
 public class TodoController {
