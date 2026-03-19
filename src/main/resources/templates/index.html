@@ -19,7 +19,7 @@
         </form>
 
         <ul>
-            <li th:each="todo : ${todos}">
+            <li th:each="todo : ${todos}" th:id="'todo-' + ${todo.id}">
                 <span
                     th:text="${todo.title}"
                     th:classappend="${todo.completed} ? 'completed' : ''">
@@ -45,6 +45,11 @@
             headers: {
                 "X-XSRF-TOKEN": csrfToken
             }
-        }).then(() => location.reload());
+        }).then(Response => {
+            if (response.ok) {
+                document.getElementById('todo-' + todoId).remove();
+            }
+        }
+        );
     }
 </script>
