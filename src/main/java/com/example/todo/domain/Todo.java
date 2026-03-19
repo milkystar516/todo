@@ -1,16 +1,37 @@
 package com.example.todo.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name = "todos")
 @Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Todo {
+    
+    @Id
+    @GeneratedValue(strategy = GeneratedValue.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String title;
-    private boolean completed;
+
+    private boolean completed = false;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Builder
+    public Todo(String title, User user) {
+        this.title = title;
+        this.user = user;
+        this.completed = false;
+    }
+
+    public void complete() {
+        this.completed = true;
+    }
 }
