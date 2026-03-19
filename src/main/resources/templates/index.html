@@ -24,6 +24,9 @@
                     th:text="${todo.title}"
                     th:classappend="${todo.completed} ? 'completed' : ''">
                 </span>
+                <form th:action="@{/${todo.id}}" method="delete">
+                    <button type="submit">삭제</button>
+                </form>
             </li>
         </ul>
 
