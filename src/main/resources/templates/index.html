@@ -27,6 +27,7 @@
                     th:data-id="${todo.id}"
                     onclick="toggleTodo(this)">
                 <span
+                    th:id="'span-' + ${todo.id}"
                     th:text="${todo.title}"
                     th:classappend="${todo.completed} ? 'completed' : ''">
                 </span>
@@ -52,6 +53,8 @@
                         document.getElementById('todo-' + todoId).remove();
                     }});
 
+            }
+
             function toggleTodo(checkbox) {
                 const todoId = checkbox.getAttribute('data-id');
 
@@ -61,12 +64,21 @@
                         "X-CSRF-TOKEN": csrfToken
                     }
                 }).then(response => {
-                    if (!response.ok) {
-                        checkbox.checked = !checkbox.checked
+                    if (response.ok) {
+                        document.getElementById('span-' + todoId).classList.toggle('completed');
+                    } else {
+                        checkbox.checked = !checkbox.checked;
                     }
                 });
-            }}
+            }
         </script>
+
+        <style>
+            .completed {
+                text-decoration: line-through;
+                color: #aaaaaa;
+            }
+        </style>
 
     </body> 
 </html>
