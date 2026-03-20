@@ -69,4 +69,25 @@ public class TodoController {
         todoRepository.delete(todo);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/todo/{todoId}")
+    @ResponseBody
+    public ResponseEntity<Void> toggleTodo(
+        @PathVariable Long todoId,
+        @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+        .orElseThrow(() -> new IllegalStateException("로그인 정보가 올바르지 않습니다"));
+
+        Todo todo = todoRepository.findById(todoId)
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 todo입니다"));
+
+        if (!todo.getUser().getId().equals(user.getId())) {
+            return ResponseEntity.status(403).build();
+        }
+
+        todo.toggleComplete();
+        todoRepository.save(todo);
+        return ResponseEntity.noContent().build();
+    }
 }

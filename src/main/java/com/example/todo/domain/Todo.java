@@ -31,7 +31,7 @@ public class Todo {
         this.completed = false;
     }
 
-    public void complete() {
-        this.completed = true;
+    public void toggleComplete() {
+        this.completed = !this.completed;
     }
 }

@@ -26,6 +26,7 @@
                     th:text="${todo.title}"
                     th:classappend="${todo.completed} ? 'completed' : ''">
                 </span>
+                <input type="checkbox">
                 <button th:data-id="${todo.id}" onclick="deleteTodo(this)">삭제</button>
             </li>
         </ul>
@@ -47,6 +48,10 @@
                     if (response.ok) {
                         document.getElementById('todo-' + todoId).remove();
                     }});
+
+            function completeTodo(checkbox) {
+                const todoId = checkbox.getAttribute()
+            }
             }
         </script>
 
