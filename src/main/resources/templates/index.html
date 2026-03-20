@@ -22,11 +22,14 @@
 
         <ul>
             <li th:each="todo : ${todos}" th:id="'todo-' + ${todo.id}">
+                <input type="checkbox"
+                    th:checked="${todo.completed}"
+                    th:data-id="${todo.id}"
+                    onclick="toggleTodo(this)">
                 <span
                     th:text="${todo.title}"
                     th:classappend="${todo.completed} ? 'completed' : ''">
                 </span>
-                <input type="checkbox">
                 <button th:data-id="${todo.id}" onclick="deleteTodo(this)">삭제</button>
             </li>
         </ul>
@@ -49,10 +52,20 @@
                         document.getElementById('todo-' + todoId).remove();
                     }});
 
-            function completeTodo(checkbox) {
-                const todoId = checkbox.getAttribute()
-            }
-            }
+            function toggleTodo(checkbox) {
+                const todoId = checkbox.getAttribute('data-id');
+
+                fetch('/todo/' + todoId, {
+                    method: "PATCH",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfToken
+                    }
+                }).then(response => {
+                    if (!response.ok) {
+                        checkbox.checked = !checkbox.checked
+                    }
+                });
+            }}
         </script>
 
     </body> 
